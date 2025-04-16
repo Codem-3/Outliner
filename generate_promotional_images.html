@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Element Inspector Pro - Promotional Images Generator</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .image-container {
+            background: white;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .image-preview {
+            border: 1px solid #ddd;
+            margin: 10px 0;
+            overflow: hidden;
+        }
+
+        .controls {
+            margin: 10px 0;
+        }
+
+        button {
+            background: #4285f4;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+
+        button:hover {
+            background: #3367d6;
+        }
+
+        .download-link {
+            display: inline-block;
+            margin-top: 10px;
+            color: #4285f4;
+            text-decoration: none;
+        }
+
+        .download-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Element Inspector Pro - Promotional Images Generator</h1>
+
+        <div class="image-container">
+            <h2>128x128 Icon</h2>
+            <div class="controls">
+                <button onclick="captureImage('icon')">Capture Image</button>
+            </div>
+            <div class="image-preview" style="width: 128px; height: 128px;">
+                <canvas id="icon" width="128" height="128"></canvas>
+            </div>
+        </div>
+
+        <div class="image-container">
+            <h2>440x280 Small Tile</h2>
+            <div class="controls">
+                <button onclick="captureImage('smallTile')">Capture Image</button>
+            </div>
+            <div class="image-preview" style="width: 440px; height: 280px;">
+                <canvas id="smallTile" width="440" height="280"></canvas>
+            </div>
+        </div>
+
+        <div class="image-container">
+            <h2>920x680 Large Tile</h2>
+            <div class="controls">
+                <button onclick="captureImage('largeTile')">Capture Image</button>
+            </div>
+            <div class="image-preview" style="width: 920px; height: 680px;">
+                <canvas id="largeTile" width="920" height="680"></canvas>
+            </div>
+        </div>
+
+        <div class="image-container">
+            <h2>1400x560 Marquee</h2>
+            <div class="controls">
+                <button onclick="captureImage('marquee')">Capture Image</button>
+            </div>
+            <div class="image-preview" style="width: 1400px; height: 560px;">
+                <canvas id="marquee" width="1400" height="560"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function drawLogo(ctx, x, y, size, color) {
+            ctx.fillStyle = color;
+            ctx.beginPath();
+            ctx.arc(x, y, size / 2, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Draw magnifying glass handle
+            ctx.strokeStyle = color;
+            ctx.lineWidth = size / 8;
+            ctx.beginPath();
+            ctx.moveTo(x + size / 2, y + size / 2);
+            ctx.lineTo(x + size, y + size);
+            ctx.stroke();
+        }
+
+        function drawFeatureText(ctx, text, x, y, size, color) {
+            ctx.fillStyle = color;
+            ctx.font = `bold ${size}px 'Segoe UI', Arial, sans-serif`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(text, x, y);
+        }
+
+        function captureImage(canvasId) {
+            const canvas = document.getElementById(canvasId);
+            const ctx = canvas.getContext('2d');
+
+            // Clear canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Set background
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Draw gradient background
+            const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+            gradient.addColorStop(0, '#4285f4');
+            gradient.addColorStop(1, '#34a853');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            switch (canvasId) {
+                case 'icon':
+                    drawLogo(ctx, canvas.width / 2, canvas.height / 2, canvas.width * 0.8, '#ffffff');
+                    break;
+
+                case 'smallTile':
+                    drawLogo(ctx, canvas.width / 4, canvas.height / 2, canvas.height * 0.6, '#ffffff');
+                    drawFeatureText(ctx, 'Element Outline', canvas.width * 0.6, canvas.height / 2, 24, '#ffffff');
+                    break;
+
+                case 'largeTile':
+                    drawLogo(ctx, canvas.width / 4, canvas.height / 2, canvas.height * 0.4, '#ffffff');
+                    drawFeatureText(ctx, 'Element Outline', canvas.width * 0.6, canvas.height / 3, 36, '#ffffff');
+                    drawFeatureText(ctx, '🔍 Inspect Elements in Real-Time', canvas.width * 0.6, canvas.height / 2, 24, '#ffffff');
+                    drawFeatureText(ctx, '🎨 Customize Outlines & Styles', canvas.width * 0.6, canvas.height * 0.6, 24, '#ffffff');
+                    break;
+
+                case 'marquee':
+                    drawLogo(ctx, canvas.width / 6, canvas.height / 2, canvas.height * 0.6, '#ffffff');
+                    drawFeatureText(ctx, 'Element Outline', canvas.width * 0.5, canvas.height / 3, 48, '#ffffff');
+                    drawFeatureText(ctx, 'The Ultimate Web Developer Tool', canvas.width * 0.5, canvas.height / 2, 32, '#ffffff');
+                    drawFeatureText(ctx, '🔍 Inspect • 🎨 Customize • 📏 Measure', canvas.width * 0.5, canvas.height * 0.6, 24, '#ffffff');
+                    break;
+            }
+
+            // Create download link
+            const link = document.createElement('a');
+            link.download = `${canvasId}.png`;
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Generate Icons</title>
+    <style>
+        canvas {
+            border: 1px solid black;
+            margin: 10px;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <canvas id="icon16" width="16" height="16"></canvas>
+        <canvas id="icon48" width="48" height="48"></canvas>
+        <canvas id="icon128" width="128" height="128"></canvas>
+        <button onclick="downloadIcons()">Download Icons</button>
+    </div>
+
+    <script>
+        function drawIcon(canvas, size) {
+            const ctx = canvas.getContext('2d');
+            ctx.fillStyle = '#4285F4'; // Google Blue
+            ctx.fillRect(0, 0, size, size);
+
+            // Draw a simple square outline
+            ctx.strokeStyle = 'white';
+            ctx.lineWidth = size / 8;
+            ctx.strokeRect(size / 4, size / 4, size / 2, size / 2);
+        }
+
+        function downloadIcons() {
+            const sizes = [16, 48, 128];
+            sizes.forEach(size => {
+                const canvas = document.getElementById(`icon${size}`);
+                const link = document.createElement('a');
+                link.download = `icon${size}.png`;
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            });
+        }
+
+        // Draw icons on page load
+        window.onload = function () {
+            drawIcon(document.getElementById('icon16'), 16);
+            drawIcon(document.getElementById('icon48'), 48);
+            drawIcon(document.getElementById('icon128'), 128);
+        };
+    </script>
+</body>
+
+</html>
