@@ -1,4 +1,6 @@
 let isEnabled = false;
+let isTabActive = false;
+let isProcessing = false;
 let currentSettings = {
     color: '#ff0000',
     width: 2,
@@ -75,6 +77,8 @@ function removeElementEventListeners(element) {
 
 // Function to add outlines to elements
 function addOutlines() {
+    if (!isTabActive) return;
+
     const elements = getTargetElements();
     elements.forEach(element => {
         if (!element.hasAttribute('data-outlined')) {
@@ -143,21 +147,44 @@ document.addEventListener('mousemove', (e) => {
     }
 });
 
+// Function to update tab state
+function updateTabState(enabled, active) {
+    if (isProcessing) return;
+
+    isProcessing = true;
+    isEnabled = enabled;
+    isTabActive = active;
+
+    if (isEnabled && isTabActive) {
+        addOutlines();
+    } else {
+        removeOutlines();
+    }
+
+    isProcessing = false;
+}
+
 // Listen for messages from the popup
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if (request.action === 'toggleOutlines') {
-        isEnabled = request.enabled;
-        if (isEnabled) {
-            addOutlines();
-        } else {
-            removeOutlines();
-        }
+        updateTabState(request.enabled, isTabActive);
     } else if (request.action === 'updateSettings') {
-        currentSettings = request.settings;
-        if (isEnabled) {
-            removeOutlines();
-            addOutlines();
+        if (!isProcessing) {
+            currentSettings = request.settings;
+            if (isEnabled && isTabActive) {
+                removeOutlines();
+                addOutlines();
+            }
         }
+    } else if (request.action === 'tabActive') {
+        updateTabState(isEnabled, request.active);
+    }
+});
+
+// Check if tab is active when content script loads
+chrome.runtime.sendMessage({ action: 'getTabState' }, (response) => {
+    if (response) {
+        updateTabState(response.enabled, response.active);
     }
 });
 
@@ -171,8 +198,5 @@ chrome.storage.sync.get({
     enabled: false
 }, function (items) {
     currentSettings = items;
-    isEnabled = items.enabled;
-    if (isEnabled) {
-        addOutlines();
-    }
+    // Don't enable outlines here, wait for tab state check
 }); 
