@@ -1,21 +1,28 @@
-MIT License
+Outliner License Agreement (Custom Open Source License)
 
 Copyright (c) 2025 Mohamed Mohamed - Codem®
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+This software, "Outliner", is provided as an open-source Chrome Extension, and may be freely used by individuals for personal, non-commercial purposes.
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+Permissions
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+Subject to the conditions below, permission is granted to any individual to:
+- Use and install this software via the Chrome Web Store or from source code.
+- View, study, and contribute to the source code to improve functionality or fix issues.
+
+Restrictions
+
+- Commercial Use is Prohibited: No person or entity is permitted to use, reproduce, redistribute, license, sublicense, sell, or otherwise commercialize this software or any derivative works based on it without prior written consent from the copyright holder.
+- Derivative Works: Any contributions or modifications made to the software shall not grant the contributor any rights to use the software commercially or to claim ownership or profits.
+- No Forking for Public Distribution: Forking this project for the purpose of public publishing under another name or identity is strictly prohibited.
+
+Ownership & Future Commercial Use
+
+The full and exclusive commercial rights to this software remain with the original author, Mohamed Mohamed - Codem®.  
+The author reserves the right to modify the licensing terms at any time, including but not limited to transitioning to a private or commercial license and monetizing the extension in the future.
+
+Contributors acknowledge and agree that they shall have no claim to revenue, licensing control, or usage rights in such future commercialization.
+
+Disclaimer
+
+This software is provided "as is", without warranty of any kind, express or implied, including but not limited to the warranties of merchantability, fitness for a particular purpose, and noninfringement. In no event shall the authors be liable for any claim, damages, or other liability, whether in an action of contract, tort or otherwise, arising from the use of the software.
