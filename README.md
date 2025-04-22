@@ -1,14 +1,31 @@
-# Element Inspector Pro
+# Outliner
 
 A powerful Chrome extension for web developers to inspect and outline elements with customizable styles and detailed element information.
 
 ## Features
 
 - 🔍 Customizable element outlines with color, width, and style options
-- ℹ️ Detailed element information on hover
+- ℹ️ Detailed element information display
 - 🎯 Target specific elements using CSS selectors
-- 🎨 Modern, tech-focused interface
-- 💾 Settings persistence across sessions
+- 🖱️ Highlight parent elements
+- 💾 Save your preferences
+
+## How to Use
+
+1. Install the extension from the Chrome Web Store
+2. Configure your outline settings:
+   - Choose outline color
+   - Set outline width
+   - Select outline style
+3. (Optional) Enter target selectors to focus on specific elements
+4. Click "Enable Outliner" to start inspecting
+
+## Target Selector Examples
+
+- `.footer` - outlines all elements with class "footer"
+- `[data-testid]` - outlines all elements with data-testid attribute
+- `#header` - outlines element with id "header"
+- `div > p` - outlines all paragraph elements that are direct children of divs
 
 ## Installation
 
@@ -36,13 +53,6 @@ A powerful Chrome extension for web developers to inspect and outline elements w
    - Enable/disable element info
 3. Enter a CSS selector to target specific elements
 4. Click "Enable Outlines" to start inspecting
-
-## Target Elements Examples
-
-- `.footer` - outlines all elements with class "footer"
-- `[data-testid]` - outlines all elements with data-testid attribute
-- `#header` - outlines element with id "header"
-- `div > p` - outlines all paragraph elements that are direct children of divs
 
 ## Development
 
