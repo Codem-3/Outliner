@@ -2,7 +2,7 @@
     "manifest_version": 3,
     "name": "Outliner",
     "version": "1.0.0",
-    "description": "🔍 Inspect & highlight HTML elements with custom outlines.",
+    "description": "A professional tool for inspecting and highlighting HTML elements with custom outlines.",
     "author": "Mohamed Mohamed - Codem®",
     "icons": {
         "16": "icons/icon16.png",

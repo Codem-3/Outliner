@@ -1,14 +1,14 @@
 # Outliner
 
-A powerful Chrome extension for web developers to inspect and outline elements with customizable styles and detailed element information.
+A professional Chrome extension for web developers to inspect and outline elements with customizable styles and detailed element information.
 
 ## Features
 
-- 🔍 Customizable element outlines with color, width, and style options
-- ℹ️ Detailed element information display
-- 🎯 Target specific elements using CSS selectors
-- 🖱️ Highlight parent elements
-- 💾 Save your preferences
+- Customizable element outlines with color, width, and style options
+- Detailed element information display
+- Target specific elements using CSS selectors
+- Highlight parent elements
+- Save your preferences
 
 ## How to Use
 
