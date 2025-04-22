@@ -2,8 +2,8 @@ let isEnabled = false;
 let isTabActive = false;
 let isProcessing = false;
 let currentSettings = {
-    color: '#ff0000',
-    width: 2,
+    color: '#00ff9d',
+    width: 1,
     style: 'solid',
     showInfo: false,
     targetSelector: ''
@@ -190,8 +190,8 @@ chrome.runtime.sendMessage({ action: 'getTabState' }, (response) => {
 
 // Load initial settings
 chrome.storage.sync.get({
-    color: '#ff0000',
-    width: 2,
+    color: '#00ff9d',
+    width: 1,
     style: 'solid',
     showInfo: false,
     targetSelector: '',
