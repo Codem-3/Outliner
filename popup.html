@@ -24,18 +24,18 @@
         }
 
         .control-group {
-            margin-bottom: 20px;
-            background: var(--control-bg);
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: var(--glow-effect);
-            border: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            background-color: hsl(222, 25%, 11%);
+            padding: 1.25rem;
+            border-radius: 0.5rem;
+            border: 1px solid rgba(0, 255, 157, 0.4);
+            box-shadow: 0 0 8px rgba(0, 255, 157, 0.3);
         }
 
         label {
             display: block;
-            margin-bottom: 10px;
-            font-weight: 600;
             color: var(--text-color);
             text-shadow: var(--glow-effect);
         }
@@ -54,8 +54,8 @@
             height: 6px;
             background: var(--border-color);
             border-radius: 3px;
-            outline: none;
             -webkit-appearance: none;
+            outline: none;
         }
 
         input[type="range"]::-webkit-slider-thumb {
@@ -85,7 +85,6 @@
         }
 
         .checkbox-group {
-            margin: 15px 0;
             display: flex;
             align-items: center;
         }
@@ -121,14 +120,9 @@
 
         .value-display {
             text-align: center;
-            margin-top: 8px;
             font-size: 14px;
             color: var(--primary-color);
             text-shadow: var(--glow-effect);
-        }
-
-        .target-group {
-            margin-top: 15px;
         }
 
         .target-input {
@@ -136,7 +130,6 @@
             justify-content: center;
             align-items: center;
             width: 90%;
-            margin: 5px auto;
             padding: 10px;
             border: 2px solid var(--border-color);
             border-radius: 4px;
@@ -159,62 +152,53 @@
         .section-title {
             font-size: 16px;
             font-weight: 600;
-            margin-bottom: 15px;
             color: var(--primary-color);
             text-shadow: var(--glow-effect);
-            text-transform: uppercase;
             letter-spacing: 1px;
-        }
-
-        .divider {
-            height: 1px;
-            background: var(--border-color);
-            margin: 20px 0;
-            opacity: 0.3;
         }
     </style>
 </head>
 
 <body>
     <div class="control-group">
-        <div class="section-title">Outline Settings</div>
-        <label for="outlineColor">Outline Color:</label>
+        <div class="section-title">Style</div>
+        <label for="outlineColor">Color</label>
         <input type="color" id="outlineColor" value="#00ff9d">
 
-        <label for="outlineWidth">Outline Width (px):</label>
+        <label for="outlineWidth">Width</label>
         <input type="range" id="outlineWidth" min="1" max="10" value="2">
         <div class="value-display" id="widthValue">2px</div>
 
-        <label for="outlineStyle">Outline Style:</label>
+        <label for="outlineStyle">Style</label>
         <select id="outlineStyle">
             <option value="solid">Solid</option>
             <option value="dashed">Dashed</option>
             <option value="dotted">Dotted</option>
             <option value="double">Double</option>
         </select>
+    </div>
 
-
-        <div class="section-title">Target Elements</div>
+    <div class="control-group">
+        <div class="section-title">Elements</div>
         <div class="checkbox-group">
             <label>
-                <input type="checkbox" id="showElementInfo"> Show Element Info on Hover
+                <input type="checkbox" id="showElementInfo">Show Element Info
             </label>
         </div>
 
         <div class="checkbox-group">
             <label>
-                <input type="checkbox" id="highlightParent"> Highlight Parent Elements
+                <input type="checkbox" id="highlightParent">Highlight Parents
             </label>
         </div>
 
         <div class="target-group">
-            <label for="targetSelector">Target Elements (CSS Selector):</label>
-            <input type="text" id="targetSelector" class="target-input"
-                placeholder="e.g., .footer, [data-testid], #header">
+            <label for="targetSelector">Target Elements</label>
+            <input type="text" id="targetSelector" class="target-input" placeholder=".footer, [data-testid], #header">
         </div>
-    </div>
 
-    <button id="toggleButton">Enable Outlines</button>
+        <button id="toggleButton">Enable Outlines</button>
+    </div>
 
     <script src="popup.js"></script>
 </body>

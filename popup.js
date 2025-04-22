@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // Update toggle button text
     function updateToggleButton(enabled) {
         toggleButton.textContent = enabled ? 'Disable Outlines' : 'Enable Outlines';
-        toggleButton.style.backgroundColor = enabled ? '#dc3545' : '#28a745';
+        toggleButton.style.backgroundColor = enabled ? '#dc3545' : '#00ff9d';
     }
 
     // Add event listeners for all controls
