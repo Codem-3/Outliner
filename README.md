@@ -2,6 +2,8 @@
 
 A professional Chrome extension for web developers to inspect and outline elements with customizable styles and detailed element information.
 
+🔗 Link: [Outliner on Chrome Web Store](https://chromewebstore.google.com/detail/outliner/fmlhdamodbalamandkndpadmadlmgkmg)
+
 ## Features
 
 - Customizable element outlines with color, width, and style options
