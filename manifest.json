@@ -2,7 +2,7 @@
     "manifest_version": 3,
     "name": "Outliner - HTML Element Inspector",
     "version": "1.0.1",
-    "description": "A professional tool for inspecting and highlighting HTML elements with custom outlines. Perfect for web developers and designers to visualize page structure.",
+    "description": "Professional HTML element inspector with custom outlines. Perfect for web developers to visualize page structure.",
     "author": "Mohamed Mohamed - Codem3®",
     "icons": {
         "16": "icons/icon16.png",
