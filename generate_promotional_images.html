@@ -4,183 +4,481 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Element Inspector Pro - Promotional Images Generator</title>
+    <title>Outliner - Promotional Images Generator</title>
     <style>
         body {
-            font-family: 'Segoe UI', Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             margin: 0;
             padding: 20px;
-            background: #f5f5f5;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
         }
 
         .container {
             max-width: 1200px;
             margin: 0 auto;
-        }
-
-        .image-container {
             background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #7f8c8d;
+            font-size: 18px;
+        }
+
+        .image-generator {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .generator-card {
+            background: #f8f9fa;
+            border-radius: 10px;
             padding: 20px;
-            margin-bottom: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            border: 2px solid #e9ecef;
         }
 
-        .image-preview {
-            border: 1px solid #ddd;
-            margin: 10px 0;
-            overflow: hidden;
+        .generator-card h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
         }
 
-        .controls {
-            margin: 10px 0;
+        .form-group {
+            margin-bottom: 15px;
         }
 
-        button {
-            background: #4285f4;
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+            color: #495057;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #e9ecef;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
+            padding: 12px 24px;
             border: none;
-            padding: 8px 16px;
-            border-radius: 4px;
+            border-radius: 5px;
             cursor: pointer;
-            margin-right: 10px;
+            font-size: 16px;
+            font-weight: 500;
+            transition: transform 0.2s;
         }
 
-        button:hover {
-            background: #3367d6;
+        .btn:hover {
+            transform: translateY(-2px);
         }
 
-        .download-link {
-            display: inline-block;
+        .preview {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .preview canvas {
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            max-width: 100%;
+        }
+
+        .download-btn {
+            background: #28a745;
             margin-top: 10px;
-            color: #4285f4;
-            text-decoration: none;
         }
 
-        .download-link:hover {
-            text-decoration: underline;
+        .download-btn:hover {
+            background: #218838;
+        }
+
+        .instructions {
+            background: #e8f4fd;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+
+        .instructions h2 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+
+        .instructions ul {
+            color: #495057;
+            line-height: 1.6;
+        }
+
+        .instructions li {
+            margin-bottom: 8px;
         }
     </style>
 </head>
 
 <body>
     <div class="container">
-        <h1>Element Inspector Pro - Promotional Images Generator</h1>
-
-        <div class="image-container">
-            <h2>128x128 Icon</h2>
-            <div class="controls">
-                <button onclick="captureImage('icon')">Capture Image</button>
-            </div>
-            <div class="image-preview" style="width: 128px; height: 128px;">
-                <canvas id="icon" width="128" height="128"></canvas>
-            </div>
+        <div class="header">
+            <h1>🎨 Outliner Promotional Images Generator</h1>
+            <p>Generate professional promotional images for Chrome Web Store</p>
         </div>
 
-        <div class="image-container">
-            <h2>440x280 Small Tile</h2>
-            <div class="controls">
-                <button onclick="captureImage('smallTile')">Capture Image</button>
-            </div>
-            <div class="image-preview" style="width: 440px; height: 280px;">
-                <canvas id="smallTile" width="440" height="280"></canvas>
-            </div>
+        <div class="instructions">
+            <h2>📋 Chrome Web Store Image Requirements</h2>
+            <ul>
+                <li><strong>Small Tile (440x280px):</strong> Used in search results and category pages</li>
+                <li><strong>Large Tile (920x680px):</strong> Used on the extension's detail page</li>
+                <li><strong>Marquee (1400x560px):</strong> Used as a banner on the detail page</li>
+                <li><strong>Icon (128x128px):</strong> Used in the Chrome Web Store</li>
+                <li><strong>Screenshots (1280x800px):</strong> Show the extension in action</li>
+            </ul>
         </div>
 
-        <div class="image-container">
-            <h2>920x680 Large Tile</h2>
-            <div class="controls">
-                <button onclick="captureImage('largeTile')">Capture Image</button>
+        <div class="image-generator">
+            <!-- Small Tile Generator -->
+            <div class="generator-card">
+                <h3>Small Tile (440x280px)</h3>
+                <div class="form-group">
+                    <label for="small-title">Title:</label>
+                    <input type="text" id="small-title" value="Outliner" placeholder="Extension title">
+                </div>
+                <div class="form-group">
+                    <label for="small-subtitle">Subtitle:</label>
+                    <input type="text" id="small-subtitle" value="HTML Element Inspector"
+                        placeholder="Brief description">
+                </div>
+                <div class="form-group">
+                    <label for="small-bg">Background Color:</label>
+                    <input type="color" id="small-bg" value="#00ff9d">
+                </div>
+                <button class="btn" onclick="generateSmallTile()">Generate Small Tile</button>
+                <div class="preview" id="small-preview"></div>
             </div>
-            <div class="image-preview" style="width: 920px; height: 680px;">
-                <canvas id="largeTile" width="920" height="680"></canvas>
-            </div>
-        </div>
 
-        <div class="image-container">
-            <h2>1400x560 Marquee</h2>
-            <div class="controls">
-                <button onclick="captureImage('marquee')">Capture Image</button>
+            <!-- Large Tile Generator -->
+            <div class="generator-card">
+                <h3>Large Tile (920x680px)</h3>
+                <div class="form-group">
+                    <label for="large-title">Title:</label>
+                    <input type="text" id="large-title" value="Outliner" placeholder="Extension title">
+                </div>
+                <div class="form-group">
+                    <label for="large-subtitle">Subtitle:</label>
+                    <input type="text" id="large-subtitle" value="Professional HTML Element Inspector"
+                        placeholder="Description">
+                </div>
+                <div class="form-group">
+                    <label for="large-features">Features:</label>
+                    <textarea id="large-features" rows="3"
+                        placeholder="• Customizable outlines&#10;• Element information&#10;• CSS selector targeting">• Customizable outlines
+• Element information
+• CSS selector targeting</textarea>
+                </div>
+                <div class="form-group">
+                    <label for="large-bg">Background Color:</label>
+                    <input type="color" id="large-bg" value="#00ff9d">
+                </div>
+                <button class="btn" onclick="generateLargeTile()">Generate Large Tile</button>
+                <div class="preview" id="large-preview"></div>
             </div>
-            <div class="image-preview" style="width: 1400px; height: 560px;">
-                <canvas id="marquee" width="1400" height="560"></canvas>
+
+            <!-- Marquee Generator -->
+            <div class="generator-card">
+                <h3>Marquee (1400x560px)</h3>
+                <div class="form-group">
+                    <label for="marquee-title">Title:</label>
+                    <input type="text" id="marquee-title" value="Outliner" placeholder="Extension title">
+                </div>
+                <div class="form-group">
+                    <label for="marquee-subtitle">Subtitle:</label>
+                    <input type="text" id="marquee-subtitle"
+                        value="Professional HTML Element Inspector for Web Developers" placeholder="Full description">
+                </div>
+                <div class="form-group">
+                    <label for="marquee-bg">Background Color:</label>
+                    <input type="color" id="marquee-bg" value="#00ff9d">
+                </div>
+                <button class="btn" onclick="generateMarquee()">Generate Marquee</button>
+                <div class="preview" id="marquee-preview"></div>
+            </div>
+
+            <!-- Screenshot Generator -->
+            <div class="generator-card">
+                <h3>Screenshot (1280x800px)</h3>
+                <div class="form-group">
+                    <label for="screenshot-title">Title:</label>
+                    <input type="text" id="screenshot-title" value="Outliner in Action" placeholder="Screenshot title">
+                </div>
+                <div class="form-group">
+                    <label for="screenshot-desc">Description:</label>
+                    <textarea id="screenshot-desc" rows="3"
+                        placeholder="Show the extension highlighting elements with custom outlines">Highlighting elements with custom outlines and showing element information on hover</textarea>
+                </div>
+                <div class="form-group">
+                    <label for="screenshot-bg">Background Color:</label>
+                    <input type="color" id="screenshot-bg" value="#ffffff">
+                </div>
+                <button class="btn" onclick="generateScreenshot()">Generate Screenshot</button>
+                <div class="preview" id="screenshot-preview"></div>
             </div>
         </div>
     </div>
 
     <script>
-        function drawLogo(ctx, x, y, size, color) {
-            ctx.fillStyle = color;
-            ctx.beginPath();
-            ctx.arc(x, y, size / 2, 0, Math.PI * 2);
-            ctx.fill();
-
-            // Draw magnifying glass handle
-            ctx.strokeStyle = color;
-            ctx.lineWidth = size / 8;
-            ctx.beginPath();
-            ctx.moveTo(x + size / 2, y + size / 2);
-            ctx.lineTo(x + size, y + size);
-            ctx.stroke();
-        }
-
-        function drawFeatureText(ctx, text, x, y, size, color) {
-            ctx.fillStyle = color;
-            ctx.font = `bold ${size}px 'Segoe UI', Arial, sans-serif`;
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-            ctx.fillText(text, x, y);
-        }
-
-        function captureImage(canvasId) {
-            const canvas = document.getElementById(canvasId);
+        function generateSmallTile() {
+            const canvas = document.createElement('canvas');
+            canvas.width = 440;
+            canvas.height = 280;
             const ctx = canvas.getContext('2d');
 
-            // Clear canvas
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            // Background
+            const bgColor = document.getElementById('small-bg').value;
+            ctx.fillStyle = bgColor;
+            ctx.fillRect(0, 0, 440, 280);
 
-            // Set background
-            ctx.fillStyle = '#ffffff';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-            // Draw gradient background
-            const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
-            gradient.addColorStop(0, '#4285f4');
-            gradient.addColorStop(1, '#34a853');
+            // Gradient overlay
+            const gradient = ctx.createLinearGradient(0, 0, 440, 280);
+            gradient.addColorStop(0, 'rgba(255,255,255,0.1)');
+            gradient.addColorStop(1, 'rgba(0,0,0,0.1)');
             ctx.fillStyle = gradient;
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillRect(0, 0, 440, 280);
 
-            switch (canvasId) {
-                case 'icon':
-                    drawLogo(ctx, canvas.width / 2, canvas.height / 2, canvas.width * 0.8, '#ffffff');
-                    drawFeatureText(ctx, 'Outliner', canvas.width * 0.6, canvas.height / 2, 24, '#ffffff');
-                    break;
+            // Title
+            ctx.fillStyle = '#ffffff';
+            ctx.font = 'bold 36px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+            ctx.textAlign = 'center';
+            ctx.fillText(document.getElementById('small-title').value, 220, 120);
 
-                case 'smallTile':
-                    drawLogo(ctx, canvas.width / 4, canvas.height / 2, canvas.height * 0.6, '#ffffff');
-                    drawFeatureText(ctx, 'Outliner', canvas.width * 0.6, canvas.height / 2, 24, '#ffffff');
-                    break;
+            // Subtitle
+            ctx.font = '18px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+            ctx.fillStyle = 'rgba(255,255,255,0.9)';
+            ctx.fillText(document.getElementById('small-subtitle').value, 220, 150);
 
-                case 'largeTile':
-                    drawLogo(ctx, canvas.width / 4, canvas.height / 2, canvas.height * 0.4, '#ffffff');
-                    drawFeatureText(ctx, 'Outliner', canvas.width * 0.6, canvas.height / 3, 36, '#ffffff');
-                    drawFeatureText(ctx, 'Customize Outlines & Styles', canvas.width * 0.6, canvas.height * 0.6, 24, '#ffffff');
-                    break;
+            // Icon placeholder
+            ctx.fillStyle = 'rgba(255,255,255,0.2)';
+            ctx.fillRect(20, 20, 60, 60);
+            ctx.fillStyle = '#ffffff';
+            ctx.font = '24px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText('🔍', 50, 55);
 
-                case 'marquee':
-                    drawLogo(ctx, canvas.width / 6, canvas.height / 2, canvas.height * 0.6, '#ffffff');
-                    drawFeatureText(ctx, 'Outliner', canvas.width * 0.5, canvas.height / 3, 48, '#ffffff');
-                    drawFeatureText(ctx, 'The Ultimate Web Developer Tool', canvas.width * 0.5, canvas.height / 2, 32, '#ffffff');
-                    drawFeatureText(ctx, 'Inspect • Customize • Measure', canvas.width * 0.5, canvas.height * 0.6, 24, '#ffffff');
-                    break;
-            }
-
-            // Create download link
-            const link = document.createElement('a');
-            link.download = `${canvasId}.png`;
-            link.href = canvas.toDataURL('image/png');
-            link.click();
+            displayPreview(canvas, 'small-preview');
         }
+
+        function generateLargeTile() {
+            const canvas = document.createElement('canvas');
+            canvas.width = 920;
+            canvas.height = 680;
+            const ctx = canvas.getContext('2d');
+
+            // Background
+            const bgColor = document.getElementById('large-bg').value;
+            ctx.fillStyle = bgColor;
+            ctx.fillRect(0, 0, 920, 680);
+
+            // Gradient overlay
+            const gradient = ctx.createLinearGradient(0, 0, 920, 680);
+            gradient.addColorStop(0, 'rgba(255,255,255,0.1)');
+            gradient.addColorStop(1, 'rgba(0,0,0,0.1)');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, 920, 680);
+
+            // Title
+            ctx.fillStyle = '#ffffff';
+            ctx.font = 'bold 48px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+            ctx.textAlign = 'center';
+            ctx.fillText(document.getElementById('large-title').value, 460, 200);
+
+            // Subtitle
+            ctx.font = '24px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+            ctx.fillStyle = 'rgba(255,255,255,0.9)';
+            ctx.fillText(document.getElementById('large-subtitle').value, 460, 240);
+
+            // Features
+            const features = document.getElementById('large-features').value.split('\n');
+            ctx.font = '18px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+            ctx.fillStyle = 'rgba(255,255,255,0.8)';
+            ctx.textAlign = 'left';
+            features.forEach((feature, index) => {
+                ctx.fillText(feature, 100, 320 + (index * 30));
+            });
+
+            // Icon placeholder
+            ctx.fillStyle = 'rgba(255,255,255,0.2)';
+            ctx.fillRect(40, 40, 80, 80);
+            ctx.fillStyle = '#ffffff';
+            ctx.font = '32px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText('🔍', 80, 85);
+
+            displayPreview(canvas, 'large-preview');
+        }
+
+        function generateMarquee() {
+            const canvas = document.createElement('canvas');
+            canvas.width = 1400;
+            canvas.height = 560;
+            const ctx = canvas.getContext('2d');
+
+            // Background
+            const bgColor = document.getElementById('marquee-bg').value;
+            ctx.fillStyle = bgColor;
+            ctx.fillRect(0, 0, 1400, 560);
+
+            // Gradient overlay
+            const gradient = ctx.createLinearGradient(0, 0, 1400, 560);
+            gradient.addColorStop(0, 'rgba(255,255,255,0.1)');
+            gradient.addColorStop(1, 'rgba(0,0,0,0.1)');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, 1400, 560);
+
+            // Title
+            ctx.fillStyle = '#ffffff';
+            ctx.font = 'bold 64px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+            ctx.textAlign = 'center';
+            ctx.fillText(document.getElementById('marquee-title').value, 700, 200);
+
+            // Subtitle
+            ctx.font = '28px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+            ctx.fillStyle = 'rgba(255,255,255,0.9)';
+            ctx.fillText(document.getElementById('marquee-subtitle').value, 700, 250);
+
+            // Icon placeholder
+            ctx.fillStyle = 'rgba(255,255,255,0.2)';
+            ctx.fillRect(60, 60, 100, 100);
+            ctx.fillStyle = '#ffffff';
+            ctx.font = '40px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText('🔍', 110, 115);
+
+            displayPreview(canvas, 'marquee-preview');
+        }
+
+        function generateScreenshot() {
+            const canvas = document.createElement('canvas');
+            canvas.width = 1280;
+            canvas.height = 800;
+            const ctx = canvas.getContext('2d');
+
+            // Background
+            const bgColor = document.getElementById('screenshot-bg').value;
+            ctx.fillStyle = bgColor;
+            ctx.fillRect(0, 0, 1280, 800);
+
+            // Browser frame
+            ctx.fillStyle = '#f1f3f4';
+            ctx.fillRect(0, 0, 1280, 60);
+            ctx.fillStyle = '#e8eaed';
+            ctx.fillRect(0, 60, 1280, 1);
+
+            // Browser tabs
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 61, 200, 40);
+            ctx.fillStyle = '#f1f3f4';
+            ctx.fillRect(200, 61, 200, 40);
+
+            // Tab text
+            ctx.fillStyle = '#5f6368';
+            ctx.font = '14px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+            ctx.textAlign = 'left';
+            ctx.fillText('Outliner Test Page', 20, 85);
+
+            // Content area
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 101, 1280, 699);
+
+            // Sample webpage content
+            ctx.fillStyle = '#202124';
+            ctx.font = 'bold 32px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+            ctx.textAlign = 'center';
+            ctx.fillText(document.getElementById('screenshot-title').value, 640, 180);
+
+            // Description
+            ctx.font = '16px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+            ctx.fillStyle = '#5f6368';
+            ctx.fillText(document.getElementById('screenshot-desc').value, 640, 220);
+
+            // Sample elements with outlines
+            const elements = [
+                { x: 200, y: 300, w: 200, h: 100, color: '#00ff9d' },
+                { x: 450, y: 300, w: 200, h: 100, color: '#ff6b6b' },
+                { x: 700, y: 300, w: 200, h: 100, color: '#4ecdc4' },
+                { x: 950, y: 300, w: 200, h: 100, color: '#45b7d1' }
+            ];
+
+            elements.forEach((el, index) => {
+                // Element background
+                ctx.fillStyle = '#f8f9fa';
+                ctx.fillRect(el.x, el.y, el.w, el.h);
+
+                // Element outline
+                ctx.strokeStyle = el.color;
+                ctx.lineWidth = 3;
+                ctx.strokeRect(el.x, el.y, el.w, el.h);
+
+                // Element text
+                ctx.fillStyle = '#202124';
+                ctx.font = '14px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+                ctx.textAlign = 'center';
+                ctx.fillText(`Element ${index + 1}`, el.x + el.w / 2, el.y + el.h / 2 + 5);
+            });
+
+            displayPreview(canvas, 'screenshot-preview');
+        }
+
+        function displayPreview(canvas, previewId) {
+            const preview = document.getElementById(previewId);
+            preview.innerHTML = '';
+            preview.appendChild(canvas);
+
+            // Add download button
+            const downloadBtn = document.createElement('button');
+            downloadBtn.className = 'btn download-btn';
+            downloadBtn.textContent = 'Download PNG';
+            downloadBtn.onclick = () => {
+                const link = document.createElement('a');
+                link.download = `${previewId.replace('-preview', '')}.png`;
+                link.href = canvas.toDataURL();
+                link.click();
+            };
+            preview.appendChild(downloadBtn);
+        }
+
+        // Generate initial previews
+        window.onload = function () {
+            generateSmallTile();
+            generateLargeTile();
+            generateMarquee();
+            generateScreenshot();
+        };
     </script>
 </body>
 

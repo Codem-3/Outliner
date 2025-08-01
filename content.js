@@ -9,56 +9,108 @@ let currentSettings = {
     targetSelector: ''
 };
 
-// Create tooltip element
-const tooltip = document.createElement('div');
-tooltip.style.cssText = `
-    position: fixed;
-    background: rgba(20, 20, 20, 0.95);
-    color: #00ff9d;
-    padding: 12px 16px;
-    border-radius: 6px;
-    font-family: 'Consolas', 'Monaco', monospace;
-    font-size: 12px;
-    z-index: 10000;
-    pointer-events: none;
-    display: none;
-    max-width: 300px;
-    line-height: 1.6;
-    box-shadow: 0 4px 12px rgba(0,255,157,0.2);
-    border: 1px solid rgba(0,255,157,0.3);
-    backdrop-filter: blur(4px);
-    text-shadow: 0 0 10px rgba(0,255,157,0.3);
-`;
+// Initialize the extension when the content script loads
+function initializeExtension() {
+    // Create tooltip element
+    const tooltip = document.createElement('div');
+    tooltip.style.cssText = `
+        position: fixed;
+        background: rgba(20, 20, 20, 0.95);
+        color: #00ff9d;
+        padding: 12px 16px;
+        border-radius: 6px;
+        font-family: 'Consolas', 'Monaco', monospace;
+        font-size: 12px;
+        z-index: 10000;
+        pointer-events: none;
+        display: none;
+        max-width: 300px;
+        line-height: 1.6;
+        box-shadow: 0 4px 12px rgba(0,255,157,0.2);
+        border: 1px solid rgba(0,255,157,0.3);
+        backdrop-filter: blur(4px);
+        text-shadow: 0 0 10px rgba(0,255,157,0.3);
+    `;
 
-document.body.appendChild(tooltip);
+    document.body.appendChild(tooltip);
+
+    // Load initial settings
+    chrome.storage.sync.get({
+        color: '#00ff9d',
+        width: 1,
+        style: 'solid',
+        showInfo: false,
+        targetSelector: '',
+        enabled: false
+    }, function (items) {
+        currentSettings = items;
+        // Check if tab is active when content script loads
+        chrome.runtime.sendMessage({ action: 'getTabState' }, (response) => {
+            if (response) {
+                updateTabState(response.enabled, response.active);
+            }
+        });
+    });
+
+    // Listen for messages from the popup
+    chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+        try {
+            if (request.action === 'toggleOutlines') {
+                updateTabState(request.enabled, isTabActive);
+            } else if (request.action === 'updateSettings') {
+                if (!isProcessing) {
+                    currentSettings = request.settings;
+                    if (isEnabled && isTabActive) {
+                        removeOutlines();
+                        addOutlines();
+                    }
+                }
+            } else if (request.action === 'tabActive') {
+                updateTabState(isEnabled, request.active);
+            }
+        } catch (error) {
+            console.error('Error handling message:', error);
+        }
+    });
+}
 
 // Function to get element info
 function getElementInfo(element) {
-    const rect = element.getBoundingClientRect();
-    const styles = window.getComputedStyle(element);
-    return `
-        Tag: ${element.tagName}
-        ID: ${element.id || 'none'}
-        Class: ${element.className || 'none'}
-        Size: ${Math.round(rect.width)}x${Math.round(rect.height)}px
-        Position: ${Math.round(rect.left)},${Math.round(rect.top)}
-        Display: ${styles.display}
-        Margin: ${styles.margin}
-        Padding: ${styles.padding}
-    `;
+    try {
+        const rect = element.getBoundingClientRect();
+        const styles = window.getComputedStyle(element);
+        return `
+            Tag: ${element.tagName}
+            ID: ${element.id || 'none'}
+            Class: ${element.className || 'none'}
+            Size: ${Math.round(rect.width)}x${Math.round(rect.height)}px
+            Position: ${Math.round(rect.left)},${Math.round(rect.top)}
+            Display: ${styles.display}
+            Margin: ${styles.margin}
+            Padding: ${styles.padding}
+        `;
+    } catch (error) {
+        console.error('Error getting element info:', error);
+        return 'Error getting element info';
+    }
 }
 
 // Function to get target elements based on selector
 function getTargetElements() {
-    if (currentSettings.targetSelector) {
-        try {
-            return document.querySelectorAll(currentSettings.targetSelector);
-        } catch (e) {
-            console.error('Invalid selector:', currentSettings.targetSelector);
-            return document.querySelectorAll('*');
+    try {
+        if (currentSettings.targetSelector) {
+            try {
+                return document.querySelectorAll(currentSettings.targetSelector);
+            } catch (e) {
+                console.error('Invalid selector:', currentSettings.targetSelector);
+                return document.querySelectorAll('*');
+            }
         }
+        return document.querySelectorAll('*');
+    } catch (error) {
+        console.error('Error getting target elements:', error);
+        return [];
     }
-    return document.querySelectorAll('*');
 }
 
 // Function to add event listeners to element
@@ -79,71 +131,108 @@ function removeElementEventListeners(element) {
 function addOutlines() {
     if (!isTabActive) return;
 
-    const elements = getTargetElements();
-    elements.forEach(element => {
-        if (!element.hasAttribute('data-outlined')) {
-            const originalOutline = element.style.outline;
-            element.style.outline = `${currentSettings.width}px ${currentSettings.style} ${currentSettings.color}`;
-            element.setAttribute('data-outlined', 'true');
-            element.setAttribute('data-original-outline', originalOutline);
-            addElementEventListeners(element);
-        }
-    });
+    try {
+        const elements = getTargetElements();
+        elements.forEach(element => {
+            if (!element.hasAttribute('data-outlined')) {
+                const originalOutline = element.style.outline;
+                element.style.outline = `${currentSettings.width}px ${currentSettings.style} ${currentSettings.color}`;
+                element.setAttribute('data-outlined', 'true');
+                element.setAttribute('data-original-outline', originalOutline);
+                addElementEventListeners(element);
+            }
+        });
+    } catch (error) {
+        console.error('Error adding outlines:', error);
+    }
 }
 
 // Function to remove outlines from elements
 function removeOutlines() {
-    const elements = document.querySelectorAll('[data-outlined]');
-    elements.forEach(element => {
-        const originalOutline = element.getAttribute('data-original-outline');
-        element.style.outline = originalOutline || '';
-        element.removeAttribute('data-outlined');
-        element.removeAttribute('data-original-outline');
-        removeElementEventListeners(element);
-    });
+    try {
+        const elements = document.querySelectorAll('[data-outlined]');
+        elements.forEach(element => {
+            const originalOutline = element.getAttribute('data-original-outline');
+            element.style.outline = originalOutline || '';
+            element.removeAttribute('data-outlined');
+            element.removeAttribute('data-original-outline');
+            removeElementEventListeners(element);
+        });
 
-    tooltip.style.display = 'none';
+        const tooltip = document.querySelector('div[style*="position: fixed"]');
+        if (tooltip) {
+            tooltip.style.display = 'none';
+        }
+    } catch (error) {
+        console.error('Error removing outlines:', error);
+    }
 }
 
 // Mouse event handlers
 function handleMouseOver(e) {
     if (!currentSettings.showInfo) return;
-    const element = e.target;
-    const info = getElementInfo(element);
-    tooltip.textContent = info;
-    tooltip.style.display = 'block';
-    updateTooltipPosition(e);
+    try {
+        const element = e.target;
+        const info = getElementInfo(element);
+        const tooltip = document.querySelector('div[style*="position: fixed"]');
+        if (tooltip) {
+            tooltip.textContent = info;
+            tooltip.style.display = 'block';
+            updateTooltipPosition(e);
+        }
+    } catch (error) {
+        console.error('Error handling mouse over:', error);
+    }
 }
 
 function handleMouseOut() {
-    tooltip.style.display = 'none';
+    try {
+        const tooltip = document.querySelector('div[style*="position: fixed"]');
+        if (tooltip) {
+            tooltip.style.display = 'none';
+        }
+    } catch (error) {
+        console.error('Error handling mouse out:', error);
+    }
 }
 
 function updateTooltipPosition(e) {
-    const tooltipWidth = tooltip.offsetWidth;
-    const tooltipHeight = tooltip.offsetHeight;
-    const windowWidth = window.innerWidth;
-    const windowHeight = window.innerHeight;
+    try {
+        const tooltip = document.querySelector('div[style*="position: fixed"]');
+        if (!tooltip) return;
 
-    let left = e.pageX + 10;
-    let top = e.pageY + 10;
+        const tooltipWidth = tooltip.offsetWidth;
+        const tooltipHeight = tooltip.offsetHeight;
+        const windowWidth = window.innerWidth;
+        const windowHeight = window.innerHeight;
 
-    // Adjust position if tooltip would go off screen
-    if (left + tooltipWidth > windowWidth) {
-        left = e.pageX - tooltipWidth - 10;
+        let left = e.pageX + 10;
+        let top = e.pageY + 10;
+
+        // Adjust position if tooltip would go off screen
+        if (left + tooltipWidth > windowWidth) {
+            left = e.pageX - tooltipWidth - 10;
+        }
+        if (top + tooltipHeight > windowHeight) {
+            top = e.pageY - tooltipHeight - 10;
+        }
+
+        tooltip.style.left = left + 'px';
+        tooltip.style.top = top + 'px';
+    } catch (error) {
+        console.error('Error updating tooltip position:', error);
     }
-    if (top + tooltipHeight > windowHeight) {
-        top = e.pageY - tooltipHeight - 10;
-    }
-
-    tooltip.style.left = left + 'px';
-    tooltip.style.top = top + 'px';
 }
 
 // Listen for mouse movement
 document.addEventListener('mousemove', (e) => {
-    if (tooltip.style.display === 'block') {
-        updateTooltipPosition(e);
+    try {
+        const tooltip = document.querySelector('div[style*="position: fixed"]');
+        if (tooltip && tooltip.style.display === 'block') {
+            updateTooltipPosition(e);
+        }
+    } catch (error) {
+        console.error('Error handling mouse move:', error);
     }
 });
 
@@ -155,51 +244,25 @@ function updateTabState(enabled, active) {
     isEnabled = enabled;
     isTabActive = active;
 
-    if (isEnabled && isTabActive) {
-        addOutlines();
-    } else {
-        removeOutlines();
+    try {
+        if (isEnabled && isTabActive) {
+            addOutlines();
+        } else {
+            removeOutlines();
+        }
+    } catch (error) {
+        console.error('Error updating tab state:', error);
     }
 
     isProcessing = false;
 }
 
-// Listen for messages from the popup
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-    if (request.action === 'toggleOutlines') {
-        updateTabState(request.enabled, isTabActive);
-    } else if (request.action === 'updateSettings') {
-        if (!isProcessing) {
-            currentSettings = request.settings;
-            if (isEnabled && isTabActive) {
-                removeOutlines();
-                addOutlines();
-            }
-        }
-    } else if (request.action === 'tabActive') {
-        updateTabState(isEnabled, request.active);
-    }
-});
-
-// Check if tab is active when content script loads
-chrome.runtime.sendMessage({ action: 'getTabState' }, (response) => {
-    if (response) {
-        updateTabState(response.enabled, response.active);
-    }
-});
-
-// Load initial settings
-chrome.storage.sync.get({
-    color: '#00ff9d',
-    width: 1,
-    style: 'solid',
-    showInfo: false,
-    targetSelector: '',
-    enabled: false
-}, function (items) {
-    currentSettings = items;
-    // Don't enable outlines here, wait for tab state check
-});
+// Initialize when DOM is ready
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializeExtension);
+} else {
+    initializeExtension();
+}
 
 function createInfoBox(element) {
     const infoBox = document.createElement('div');

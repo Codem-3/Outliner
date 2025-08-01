@@ -1,9 +1,9 @@
 {
     "manifest_version": 3,
-    "name": "Outliner",
-    "version": "1.0.0",
-    "description": "A professional tool for inspecting and highlighting HTML elements with custom outlines.",
-    "author": "Mohamed Mohamed - Codem®",
+    "name": "Outliner - HTML Element Inspector",
+    "version": "1.0.1",
+    "description": "A professional tool for inspecting and highlighting HTML elements with custom outlines. Perfect for web developers and designers to visualize page structure.",
+    "author": "Mohamed Mohamed - Codem3®",
     "icons": {
         "16": "icons/icon16.png",
         "48": "icons/icon48.png",
@@ -13,13 +13,17 @@
         "activeTab",
         "storage"
     ],
+    "host_permissions": [
+        "<all_urls>"
+    ],
     "action": {
         "default_popup": "popup.html",
         "default_icon": {
             "16": "icons/icon16.png",
             "48": "icons/icon48.png",
             "128": "icons/icon128.png"
-        }
+        },
+        "default_title": "Outliner - HTML Element Inspector"
     },
     "background": {
         "service_worker": "background.js"
@@ -31,7 +35,9 @@
             ],
             "js": [
                 "content.js"
-            ]
+            ],
+            "run_at": "document_end",
+            "all_frames": true
         }
     ],
     "web_accessible_resources": [
@@ -43,5 +49,7 @@
                 "<all_urls>"
             ]
         }
-    ]
+    ],
+    "homepage_url": "https://github.com/yourusername/outliner-extension",
+    "minimum_chrome_version": "88"
 }

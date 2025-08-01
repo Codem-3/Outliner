@@ -55,7 +55,7 @@ document.addEventListener('DOMContentLoaded', function () {
     function updateSettings() {
         const settings = {
             color: colorPicker.value,
-            width: widthSlider.value,
+            width: parseInt(widthSlider.value),
             style: styleSelect.value,
             showInfo: showInfoCheckbox.checked,
             highlightParent: highlightParent.checked,
@@ -70,6 +70,22 @@ document.addEventListener('DOMContentLoaded', function () {
                     chrome.tabs.sendMessage(tabs[0].id, {
                         action: 'updateSettings',
                         settings: settings
+                    }).catch(() => {
+                        // If content script is not loaded, inject it
+                        chrome.scripting.executeScript({
+                            target: { tabId: tabs[0].id },
+                            files: ['content.js']
+                        }).then(() => {
+                            // Send message after injection
+                            setTimeout(() => {
+                                chrome.tabs.sendMessage(tabs[0].id, {
+                                    action: 'updateSettings',
+                                    settings: settings
+                                });
+                            }, 100);
+                        }).catch((error) => {
+                            console.error('Error injecting content script:', error);
+                        });
                     });
                 }
             });
@@ -79,7 +95,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // Update toggle button text
     function updateToggleButton(enabled) {
         toggleButton.textContent = enabled ? 'DISABLE OUTLINES' : 'ENABLE OUTLINES';
-        toggleButton.style.backgroundColor = enabled ? '#dc3545' : '#00ff9d';
+        toggleButton.className = enabled ? 'toggle-button active' : 'toggle-button inactive';
     }
 
     // Add event listeners for all controls
@@ -106,6 +122,22 @@ document.addEventListener('DOMContentLoaded', function () {
                         chrome.tabs.sendMessage(tabs[0].id, {
                             action: 'toggleOutlines',
                             enabled: newState
+                        }).catch(() => {
+                            // If content script is not loaded, inject it
+                            chrome.scripting.executeScript({
+                                target: { tabId: tabs[0].id },
+                                files: ['content.js']
+                            }).then(() => {
+                                // Send message after injection
+                                setTimeout(() => {
+                                    chrome.tabs.sendMessage(tabs[0].id, {
+                                        action: 'toggleOutlines',
+                                        enabled: newState
+                                    });
+                                }, 100);
+                            }).catch((error) => {
+                                console.error('Error injecting content script:', error);
+                            });
                         });
                     }
                 });

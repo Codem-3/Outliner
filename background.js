@@ -4,7 +4,7 @@ let isProcessing = false;
 
 // Update extension icon
 function updateIcon() {
-    const iconPath = isEnabled ? 'icons/active.png' : 'icons/inactive.png';
+    const iconPath = isEnabled ? 'icons/icon48.png' : 'icons/icon48.png';
     chrome.action.setIcon({ path: iconPath });
 }
 
@@ -14,31 +14,49 @@ chrome.tabs.onActivated.addListener((activeInfo) => {
     if (isEnabled) {
         // Send message to the newly activated tab
         chrome.tabs.sendMessage(activeTabId, {
-            action: 'toggleOutlines',
-            enabled: isEnabled
+            action: 'tabActive',
+            active: true
+        }).catch(() => {
+            // If content script is not loaded, inject it
+            chrome.scripting.executeScript({
+                target: { tabId: activeTabId },
+                files: ['content.js']
+            }).then(() => {
+                // Send message after injection
+                setTimeout(() => {
+                    chrome.tabs.sendMessage(activeTabId, {
+                        action: 'tabActive',
+                        active: true
+                    });
+                }, 100);
+            });
         });
     }
 });
 
-// Listen for extension icon click
-chrome.action.onClicked.addListener((tab) => {
-    if (isProcessing) return; // Prevent multiple clicks
+// Listen for tab updates (for local files)
+chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
+    if (changeInfo.status === 'complete' && tab.url &&
+        (tab.url.startsWith('file://') || tab.url.startsWith('http://') || tab.url.startsWith('https://'))) {
+        activeTabId = tabId;
 
-    isProcessing = true;
-    isEnabled = !isEnabled;
-    activeTabId = tab.id;
+        // Inject content script if needed
+        chrome.scripting.executeScript({
+            target: { tabId: tabId },
+            files: ['content.js']
+        }).catch(() => {
+            // Content script might already be injected
+        });
 
-    // Update icon immediately for visual feedback
-    updateIcon();
-
-    // Send message only to the active tab
-    chrome.tabs.sendMessage(activeTabId, {
-        action: 'toggleOutlines',
-        enabled: isEnabled
-    }, () => {
-        // Reset processing flag after message is sent
-        isProcessing = false;
-    });
+        if (isEnabled) {
+            setTimeout(() => {
+                chrome.tabs.sendMessage(tabId, {
+                    action: 'tabActive',
+                    active: true
+                });
+            }, 100);
+        }
+    }
 });
 
 // Listen for messages from content scripts
@@ -48,6 +66,10 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
             active: sender.tab.id === activeTabId,
             enabled: isEnabled
         });
+    } else if (request.action === 'toggleOutlines') {
+        isEnabled = request.enabled;
+        activeTabId = sender.tab.id;
+        updateIcon();
     }
     return true; // Keep the message channel open for async response
 });
