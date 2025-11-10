@@ -20,6 +20,8 @@ A professional Chrome extension for web developers and designers to inspect and 
 2. Search for "Outliner - HTML Element Inspector"
 3. Click "Add to Chrome"
 
+**URL**: [Outliner - HTML Element Inspector](https://chromewebstore.google.com/detail/outliner-html-element-ins/fmlhdamodbalamandkndpadmadlmgkmg)
+
 ### Manual Installation (Developer Mode)
 
 1. Download or clone this repository
